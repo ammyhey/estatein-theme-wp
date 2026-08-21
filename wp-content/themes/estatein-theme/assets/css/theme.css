@@ -29,10 +29,22 @@ body {
 a {
     color: #fff;
     text-decoration: none;
+    transition: opacity 0.2s ease;
 }
 a:hover {
     color: #fff;
-    text-decoration: underline;
+    text-decoration: none;
+    opacity: 0.7;
+}
+.btn:hover,
+.btn-primary:hover,
+.btn-view-all:hover,
+.btn-outline-light:hover,
+.social-links a:hover,
+.navbar-toggler:hover,
+.announcement-close:hover,
+.estatein-slider-btn:hover {
+    opacity: 1;
 }
 h1,
 h2,
@@ -983,9 +995,6 @@ p {
 .footer-legal-link {
     text-decoration: none;
 }
-.footer-legal-link:hover {
-    color: #fff;
-}
 .social-links {
     display: flex;
     flex-shrink: 0;
@@ -999,12 +1008,19 @@ p {
     display: grid;
     place-items: center;
     color: #fff;
+    transition: transform 0.25s ease, background-color 0.25s ease, opacity 0.25s ease;
+}
+.social-links a:hover {
+    opacity: 0.75;
+    transform: translateY(-3px);
+    background: #222;
 }
 .social-links img {
     width: 20px;
     height: 20px;
     object-fit: contain;
     display: block;
+    pointer-events: none;
 }
 .site-footer .nf-form-cont {
     margin: 0;
@@ -1331,6 +1347,9 @@ p {
     .navbar-brand {
         padding: 20px 0;
     }
+    .navbar .navbar-brand {
+        padding: 6px 0;
+    }
     .site-logo {
         max-height: 28px;
         width: auto;
@@ -1345,8 +1364,10 @@ p {
         padding: 0;
     }
     .navbar-collapse {
-        padding-bottom: 18px;
         background: var(--surface);
+        margin-left: -15px;
+        margin-right: -15px;
+        padding: 15px;
     }
     .navbar-nav {
         gap: 8px;
@@ -1359,8 +1380,10 @@ p {
     }
     .navbar-nav .current-menu-item > a {
         display: inline-block;
-        padding: 12px 20px;
+        padding: 12px 0;
         font-size: 14px;
+        background: transparent;
+        border: 0;
     }
     h1,
     .hero-content h1 {
@@ -1383,15 +1406,20 @@ p {
     }
     .hero-image-wrap {
         order: 1;
-        margin: 0 16px;
         min-height: 302px;
         height: 302px;
         border-left: 0;
         border: 0;
         border-radius: 0;
+        margin: 40px 16px 0;
+        .hero-image {
+            border-radius: 12px;
+            object-position: top center;
+
+        }
     }
     .hero-content {
-        padding: 40px 0 0;
+        padding: 60px 0 40px
         gap: 40px;
         max-width: none;
     }
@@ -1414,6 +1442,7 @@ p {
     .hero-stats {
         grid-template-columns: 1fr 1fr;
         gap: 12px;
+        text-align: center;
     }
     .hero-stats .stat-card:last-child {
         grid-column: 1 / -1;
@@ -1431,7 +1460,7 @@ p {
     .hero-orbit {
         left: 0;
         right: auto;
-        bottom: 0;
+        bottom: -30px;
         top: auto;
         width: 117px;
         height: 117px;
@@ -1715,6 +1744,21 @@ p {
     }
 }
 
+@media (max-width: 767.98px) {
+    .navbar .navbar-brand {
+        width: 113px;
+        padding: 13px 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar .navbar-brand {
+        width: 93px;
+        padding: 16px 0;
+
+    }
+}
+
 /* Ninja Forms: Estatein dark-theme treatment */
 .nf-form-cont .nf-form-content {
     padding: 0;
@@ -1762,4 +1806,42 @@ p {
 }
 .nf-form-cont .nf-response-msg {
     color: #fff !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .content-section,
+    .footer-cta,
+    .page-hero {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .content-section.is-inview,
+    .footer-cta.is-inview,
+    .page-hero.is-inview {
+        opacity: 1;
+        transform: none;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    a,
+    .social-links a,
+    .content-section,
+    .footer-cta,
+    .page-hero {
+        transition: none;
+    }
+    .social-links a:hover {
+        transform: none;
+        opacity: 0.8;
+    }
+    .content-section,
+    .footer-cta,
+    .page-hero {
+        opacity: 1;
+        transform: none;
+    }
 }

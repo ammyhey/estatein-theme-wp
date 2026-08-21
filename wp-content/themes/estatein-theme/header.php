@@ -8,6 +8,9 @@ if (!defined('ABSPATH')) {
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php wp_head(); ?>
+	<noscript>
+		<style>.content-section,.footer-cta,.page-hero{opacity:1!important;transform:none!important}</style>
+	</noscript>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>

@@ -307,7 +307,7 @@
 		left: 0;
 		right: auto;
 		top: auto;
-		bottom: 0;
+		bottom: -40px;
 		margin-top: 0;
 		width: 117px;
 		height: 117px;
@@ -319,7 +319,9 @@
 	.hero-feature-bar {
 		margin: 0 16px;
 		padding: 10px;
-		box-shadow: none;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: 0 -4px 2px 3px #191919, 0 10px 0 0 #191919;
 	}
 	.hero-feature-grid {
 		grid-template-columns: 1fr 1fr;
