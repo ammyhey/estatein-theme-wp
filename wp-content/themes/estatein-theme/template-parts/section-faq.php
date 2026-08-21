@@ -16,22 +16,25 @@ $posts = estatein_home_cpt_query('faq', 'faq_count', 6);
 		</div>
 
 		<?php if ($posts) : ?>
-			<div class="estatein-slider" data-estatein-slider data-slides="3">
-				<div class="estatein-slider-track">
+			<div class="estatein-slider" data-estatein-slider data-slides="3" role="region" aria-roledescription="carousel" aria-label="<?php echo esc_attr(estatein_field('faq_heading', false, 'Frequently Asked Questions')); ?>">
+				<div class="estatein-slider-track" id="faq-slides">
 					<?php foreach ($posts as $post) :
 						setup_postdata($post);
 						$pid = $post->ID;
 						?>
 						<div class="estatein-slide">
-							<article class="faq-card h-100">
+							<article class="faq-card card-reveal h-100">
 								<h3><?php echo esc_html(get_the_title($pid)); ?></h3>
 								<p><?php echo esc_html(estatein_field('faq_short_answer', $pid, wp_trim_words(get_post_field('post_content', $pid), 28))); ?></p>
-								<a class="btn btn-view-all faq-read-more" href="<?php echo esc_url(estatein_single_url($pid)); ?>"><?php esc_html_e('Read More', 'estatein'); ?></a>
+								<a class="btn btn-view-all faq-read-more" href="<?php echo esc_url(estatein_single_url($pid)); ?>">
+									<?php esc_html_e('Read More', 'estatein'); ?>
+									<span class="visually-hidden"> <?php echo esc_html(get_the_title($pid)); ?></span>
+								</a>
 							</article>
 						</div>
 					<?php endforeach; wp_reset_postdata(); ?>
 				</div>
-				<?php estatein_slider_controls(estatein_button(estatein_field('faq_button_label', false, "View All FAQ's"), estatein_nav_url(estatein_field('faq_button_url', false, '')), 'btn btn-view-all')); ?>
+				<?php estatein_slider_controls(estatein_button(estatein_field('faq_button_label', false, "View All FAQ's"), estatein_nav_url(estatein_field('faq_button_url', false, '')), 'btn btn-view-all'), __('questions', 'estatein'), 'faq-slides'); ?>
 			</div>
 		<?php else : ?>
 			<div class="empty-state"><?php esc_html_e('Add FAQ posts to populate this section.', 'estatein'); ?></div>

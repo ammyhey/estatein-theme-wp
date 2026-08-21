@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php wp_head(); ?>
 	<noscript>
-		<style>.content-section,.footer-cta{opacity:1!important;transform:none!important}</style>
+		<style>.content-section,.footer-cta,.hero-reveal,.card-reveal{opacity:1!important;transform:none!important;animation:none!important}</style>
 	</noscript>
 </head>
 <body <?php body_class(); ?>>
@@ -20,31 +20,31 @@ $announcement_link = estatein_field('announcement_link_text', 'option', 'Learn M
 $announcement_url = estatein_nav_url(estatein_field('announcement_link_url', 'option', ''));
 $logo = estatein_field('site_logo', 'option');
 ?>
-<div class="announcement-bar">
+<aside class="announcement-bar" aria-label="<?php esc_attr_e('Announcement', 'estatein'); ?>">
 	<div class="container-xl">
-		<div class="d-flex justify-content-center align-items-center gap-2 text-center position-relative py-2">
+		<div class="announcement-bar-inner d-flex justify-content-center align-items-center gap-2 text-center position-relative py-2">
 			<?php echo estatein_icon('sparkle', 'announce-spark'); ?>
 			<span><?php echo esc_html($announcement); ?></span>
 			<a href="<?php echo esc_url($announcement_url); ?>"><?php echo esc_html($announcement_link); ?></a>
 			<button class="announcement-close" type="button" aria-label="<?php esc_attr_e('Close announcement', 'estatein'); ?>">
-				<img src="<?php echo esc_url(get_theme_file_uri('assets/images/close-button.svg')); ?>" alt="">
+				<img src="<?php echo esc_url(get_theme_file_uri('assets/images/close-button.svg')); ?>" alt="" width="28" height="28" aria-hidden="true">
 			</button>
 		</div>
 	</div>
-</div>
+</aside>
 <header class="site-header">
-	<nav class="navbar navbar-expand-lg">
+	<nav class="navbar navbar-expand-lg" aria-label="<?php esc_attr_e('Primary', 'estatein'); ?>">
 		<div class="container-xl">
 			<a class="navbar-brand" href="<?php echo esc_url(home_url('/')); ?>">
 				<?php
 				if ($logo) {
-					echo estatein_image('site_logo', 'medium', 'option', 'site-logo img-fluid');
+					echo estatein_image('site_logo', 'medium', 'option', 'site-logo img-fluid', get_bloginfo('name'));
 				} else {
 					echo '<img class="site-logo img-fluid" src="' . esc_url(get_theme_file_uri('assets/images/logo.svg')) . '" alt="' . esc_attr(get_bloginfo('name')) . '">';
 				}
 				?>
 			</a>
-			<button class="hamburger navbar-toggler hamburger--elastic" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNav" aria-controls="primaryNav" aria-expanded="false" aria-label="<?php esc_attr_e('Toggle navigation', 'estatein'); ?>">
+			<button class="hamburger navbar-toggler hamburger--elastic" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNav" aria-controls="primaryNav" aria-expanded="false" aria-label="<?php esc_attr_e('Toggle navigation', 'estatein'); ?>" data-close-label="<?php esc_attr_e('Close navigation', 'estatein'); ?>">
 				<span class="hamburger-box"><span class="hamburger-inner"></span></span>
 			</button>
 			<div class="collapse navbar-collapse" id="primaryNav">

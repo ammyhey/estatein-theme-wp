@@ -7,45 +7,21 @@ if (!defined('ABSPATH')) {
  * Query helpers for homepage carousels.
  */
 function estatein_home_properties_query() {
-	$ids = [];
-	for ($i = 1; $i <= 3; $i++) {
-		$id = (int) estatein_field('featured_property_' . $i, false);
-		if ($id) {
-			$ids[] = $id;
-		}
-	}
-
-	$count = max(6, (int) estatein_field('featured_count', false, 9));
-
-	if ($ids) {
-		$featured = new WP_Query([
-			'post_type'      => 'property',
-			'post_status'    => 'publish',
-			'posts_per_page' => count($ids),
-			'post__in'       => $ids,
-			'orderby'        => 'post__in',
-		]);
-		$exclude = wp_list_pluck($featured->posts, 'ID');
-		$rest = new WP_Query([
-			'post_type'      => 'property',
-			'post_status'    => 'publish',
-			'posts_per_page' => max(0, $count - count($exclude)),
-			'post__not_in'   => $exclude,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		]);
-		$posts = array_merge($featured->posts, $rest->posts);
-		return $posts;
-	}
-
-	$q = new WP_Query([
+	$count = (int) estatein_field('featured_count', false, 9);
+	return new WP_Query([
 		'post_type'      => 'property',
 		'post_status'    => 'publish',
-		'posts_per_page' => $count,
+		'posts_per_page' => $count > 0 ? $count : 9,
 		'orderby'        => 'date',
 		'order'          => 'DESC',
+		'tax_query'      => [
+			[
+				'taxonomy' => 'featured_property',
+				'field'    => 'slug',
+				'terms'    => 'featured',
+			],
+		],
 	]);
-	return $q->posts;
 }
 
 function estatein_home_cpt_query($post_type, $count_field, $default = 6) {
@@ -68,25 +44,35 @@ function estatein_slider_arrow_icon($direction = 'next') {
 	}
 	$svg = file_get_contents($path);
 	$svg = preg_replace('/fill="(white|#808080|#fff|#FFFFFF)"/i', 'fill="currentColor"', $svg);
-	$svg = str_replace('style="display: block;"', 'aria-hidden="true"', $svg);
+	if (stripos($svg, 'aria-hidden') === false) {
+		$svg = preg_replace('/<svg\b/', '<svg aria-hidden="true"', $svg, 1);
+	}
+	if (stripos($svg, 'focusable') === false) {
+		$svg = preg_replace('/<svg\b/', '<svg focusable="false"', $svg, 1);
+	}
+	$svg = str_replace('style="display: block;"', '', $svg);
 	return $svg;
 }
 
-function estatein_slider_controls($view_all_html = '') {
+function estatein_slider_controls($view_all_html = '', $label = '', $track_id = '') {
+	$label = $label ?: __('slides', 'estatein');
+	$prev_label = sprintf(__('Previous %s', 'estatein'), $label);
+	$next_label = sprintf(__('Next %s', 'estatein'), $label);
 	?>
 	<div class="estatein-slider-controls">
 		<?php if ($view_all_html) : ?>
 			<div class="estatein-slider-view-all"><?php echo $view_all_html; ?></div>
 		<?php endif; ?>
-		<div class="estatein-slider-counter" aria-live="polite">
+		<div class="estatein-slider-counter" aria-live="polite" aria-atomic="true">
+			<span class="visually-hidden"><?php esc_html_e('Slide', 'estatein'); ?> </span>
 			<span class="current">01</span>
-			<span class="sep">of</span>
+			<span class="sep"><?php esc_html_e('of', 'estatein'); ?></span>
 			<span class="total">01</span>
 		</div>
-		<button type="button" class="estatein-slider-btn estatein-slider-prev" aria-label="<?php esc_attr_e('Previous', 'estatein'); ?>">
+		<button type="button" class="estatein-slider-btn estatein-slider-prev" aria-label="<?php echo esc_attr($prev_label); ?>"<?php echo $track_id ? ' aria-controls="' . esc_attr($track_id) . '"' : ''; ?>>
 			<?php echo estatein_slider_arrow_icon('prev'); ?>
 		</button>
-		<button type="button" class="estatein-slider-btn estatein-slider-next" aria-label="<?php esc_attr_e('Next', 'estatein'); ?>">
+		<button type="button" class="estatein-slider-btn estatein-slider-next" aria-label="<?php echo esc_attr($next_label); ?>"<?php echo $track_id ? ' aria-controls="' . esc_attr($track_id) . '"' : ''; ?>>
 			<?php echo estatein_slider_arrow_icon('next'); ?>
 		</button>
 	</div>

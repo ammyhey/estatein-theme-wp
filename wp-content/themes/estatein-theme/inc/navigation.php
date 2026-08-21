@@ -54,3 +54,68 @@ function estatein_park_menu_links($items) {
   return $items;
 }
 add_filter('wp_nav_menu_objects', 'estatein_park_menu_links');
+
+/**
+ * Footer: top-level items are column headings; children are the links.
+ */
+class Estatein_Footer_Nav_Walker extends Walker_Nav_Menu {
+	public function start_lvl(&$output, $depth = 0, $args = null) {
+		if (0 === (int) $depth) {
+			$output .= '<ul class="list-unstyled footer-links">';
+		}
+	}
+
+	public function end_lvl(&$output, $depth = 0, $args = null) {
+		if (0 === (int) $depth) {
+			$output .= '</ul>';
+		}
+	}
+
+	public function start_el(&$output, $data_object, $depth = 0, $args = null, $current_object_id = 0) {
+		$item  = $data_object;
+		$title = apply_filters('the_title', $item->title, $item->ID);
+
+		if (0 === (int) $depth) {
+			$slug = sanitize_title($item->title);
+			$slug_map = [
+				'about-us'   => 'about',
+				'contact-us' => 'contact',
+			];
+			if (isset($slug_map[ $slug ])) {
+				$slug = $slug_map[ $slug ];
+			}
+			$slug = sanitize_html_class($slug);
+			$output .= '<div class="footer-nav-col footer-nav-' . esc_attr($slug) . '">';
+			$heading = esc_html($title);
+			if (estatein_url_is_front_page($item->url)) {
+				$heading = '<a href="' . esc_url(home_url('/')) . '">' . $heading . '</a>';
+			}
+			$output .= '<h3 class="footer-heading">' . $heading . '</h3>';
+			return;
+		}
+
+		$output .= '<li><a href="' . esc_url($item->url) . '">' . esc_html($title) . '</a></li>';
+	}
+
+	public function end_el(&$output, $data_object, $depth = 0, $args = null) {
+		if (0 === (int) $depth) {
+			$output .= '</div>';
+		}
+	}
+}
+
+function estatein_footer_menu_fallback() {
+	foreach (estatein_footer_nav_columns() as $col) {
+		echo '<div class="footer-nav-col footer-nav-' . esc_attr($col['slug']) . '">';
+		$heading = esc_html($col['title']);
+		if ('home' === $col['slug']) {
+			$heading = '<a href="' . esc_url(home_url('/')) . '">' . $heading . '</a>';
+		}
+		echo '<h3 class="footer-heading">' . $heading . '</h3>';
+		echo '<ul class="list-unstyled footer-links">';
+		foreach ($col['links'] as $label) {
+			echo '<li><a href="' . esc_url(ESTATEIN_NAV_PLACEHOLDER) . '">' . esc_html($label) . '</a></li>';
+		}
+		echo '</ul></div>';
+	}
+}

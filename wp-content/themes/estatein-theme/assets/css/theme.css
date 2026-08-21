@@ -16,6 +16,31 @@ html {
     scroll-behavior: smooth;
 }
 
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.navbar-toggler:focus-visible,
+.hamburger:focus-visible,
+.estatein-slider-btn:focus-visible,
+.announcement-close:focus-visible,
+.social-links a:focus-visible,
+.feature-service-card:focus-visible,
+.nav-link:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 3px;
+}
+.btn:focus,
+.btn-primary:focus,
+.btn-outline-light:focus,
+.btn-view-all:focus,
+.navbar-toggler:focus,
+.form-control:focus {
+    box-shadow: none;
+}
+
 body {
     margin: 0;
     background: var(--bg);
@@ -85,9 +110,13 @@ p {
     color: var(--muted) !important;
 }
 .hamburger {
-    &:focus {
+    &:focus:not(:focus-visible) {
          outline: none !important;
          box-shadow: none !important;
+     }
+    &:focus-visible {
+         outline: 2px solid var(--accent-2);
+         outline-offset: 4px;
      }
     &:not(.is-active) {
      .hamburger-inner {
@@ -120,6 +149,7 @@ p {
     font-size: 18px;
     font-weight: 500;
     position: relative;
+    z-index: 21;
     &::after {
          content: "";
          position: absolute;
@@ -129,13 +159,19 @@ p {
          height: 100%;
          background-image: url("../images/abstract/top-banner-bg.png");
          background-size: cover;
-         opacity: 0.2;       /* Sets background image opacity to 40% */
-         z-index: 2;
+         opacity: 0.2;
+         z-index: 0;
+         pointer-events: none;
      }
+}
+.announcement-bar-inner {
+    width: 100%;
+    z-index: 1;
 }
 .announcement-bar a {
     position: relative;
     margin-left: 5px;
+    z-index: 1;
     &::after {
          content: "";
          position: absolute;
@@ -153,8 +189,7 @@ p {
     font-size: 28px;
     margin-left: auto;
     opacity: 0.8;
-    transform: translateY(-50%);
-    z-index: 3;
+    z-index: 1;
 }
 .site-header {
     height: 99px;
@@ -269,7 +304,7 @@ p {
     white-space: nowrap;
 }
 .btn-view-all:hover,
-.btn-view-all:focus {
+.btn-view-all:focus-visible {
     background: #222;
     border-color: #333;
     color: #fff;
@@ -404,9 +439,16 @@ p {
 .hero-image-wrap {
     min-height: 420px;
     position: relative;
+    overflow: visible;
     background: radial-gradient(circle at 50% 45%, rgba(112, 59, 247, 0.25), transparent 45%),
     repeating-radial-gradient(ellipse at center, transparent 0 15px, rgba(255, 255, 255, 0.035) 16px 17px);
     border-left: 1px solid var(--border);
+}
+.hero-image-clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
 }
 .hero-image {
     width: 100%;
@@ -415,11 +457,15 @@ p {
     object-position: right center;
     position: absolute;
     inset: 0;
+    will-change: transform;
+    transform: scale(1.12);
 }
 .hero-placeholder {
     position: absolute;
     inset: 0;
     background: linear-gradient(135deg, #252525, #0e0e0e 60%, #241344);
+    will-change: transform;
+    transform: scale(1.12);
 }
 .hero-orbit {
     position: absolute;
@@ -442,7 +488,6 @@ p {
     background: var(--surface);
     padding: 16px 24px;
     border-radius: 12px;
-    height: 100%;
 }
 .stat-card strong {
     display: block;
@@ -553,6 +598,21 @@ p {
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 0;
+}
+.property-excerpt-more {
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+    margin-left: 4px;
+    white-space: nowrap;
+}
+.property-excerpt-more:hover,
+.property-excerpt-more:focus-visible {
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 1;
 }
 .property-meta {
     display: flex;
@@ -680,11 +740,19 @@ p {
     display: flex;
     align-items: center;
 }
+.footer-cta-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
 .footer-cta-deco {
     position: absolute;
     pointer-events: none;
     z-index: 0;
     max-width: none;
+    will-change: transform;
 }
 .footer-cta-deco--left {
     left: -20px;
@@ -762,15 +830,44 @@ p {
     padding: 0 20px;
     min-width: 0;
 }
+.footer-nav-col:first-child,
 .footer-nav-home {
     padding-left: 0;
 }
+.footer-nav-col:last-child,
 .footer-nav-contact {
     padding-right: 0;
     border-right: 0;
 }
 .newsletter-form {
     max-width: 423px;
+    width: 100%;
+}
+.newsletter-field {
+    position: relative;
+}
+.newsletter-send {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+}
+.newsletter-send img {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+.newsletter-send:hover {
+    opacity: 0.75;
 }
 .footer-heading {
     font-size: 20px;
@@ -778,6 +875,10 @@ p {
     color: #999;
     line-height: 1.5;
     margin-bottom: 20px;
+}
+.footer-heading a {
+    color: inherit;
+    text-decoration: none;
 }
 .footer-links {
     margin: 0;
@@ -852,25 +953,6 @@ p {
 }
 .site-footer .nf-form-content {
     padding: 0;
-}
-.site-footer .nf-field-container {
-    margin-bottom: 10px;
-}
-.site-footer input[type="email"] {
-    height: 66px !important;
-    background: #171717 !important;
-    border: 1px solid #333 !important;
-    color: #fff !important;
-    border-radius: 10px !important;
-    padding: 0 60px 0 20px !important;
-}
-.site-footer input[type="submit"],
-.site-footer button {
-    background: var(--accent) !important;
-    border: 0 !important;
-    border-radius: 10px !important;
-    color: #fff !important;
-    padding: 14px 22px !important;
 }
 .pagination {
     display: flex;
@@ -1149,10 +1231,15 @@ p {
         display: none;
     }
     .announcement-close {
-        width: 26px;
-        height: 26px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
         transform: none;
         flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     .announcement-close img {
         width: 18px;
@@ -1160,9 +1247,14 @@ p {
         display: block;
     }
     .navbar-toggler {
-        width: 28px;
-        height: 28px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
         padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     .navbar-brand {
         padding: 20px 0;
@@ -1177,8 +1269,31 @@ p {
     .site-footer .site-logo {
         max-height: 34px;
     }
-    .site-footer input[type="email"] {
+    .newsletter-form .email-container input[type="email"],
+    .newsletter-field input[type="email"] {
         height: 52px !important;
+        font-size: 14px !important;
+        padding: 0 48px 0 48px !important;
+    }
+    .newsletter-icon {
+        width: 20px;
+        height: 20px;
+    }
+    .newsletter-icon-email {
+        left: 16px;
+    }
+    .newsletter-form nf-field:has(.submit-container),
+    .newsletter-form .submit-container {
+        height: 52px;
+        width: 40px;
+        right: 6px;
+    }
+    .newsletter-form .submit-container input,
+    .newsletter-form .submit-container button,
+    .newsletter-send {
+        width: 40px !important;
+        height: 40px !important;
+        margin-top: 6px !important;
     }
     .site-footer .navbar-brand {
         padding: 0;
@@ -1421,7 +1536,7 @@ p {
         padding: 5px 20px 20px !important;
         position: relative;
         margin-bottom: 20px;
-        border-right: 1px solid var(--border);
+        border-right: 1px solid var(--border) !important;
         &:after {
             content: "";
              position: absolute;
@@ -1592,9 +1707,9 @@ p {
     font-size: 16px;
     font-weight: 500;
 }
-.nf-form-cont input:not([type="submit"]),
-.nf-form-cont select,
-.nf-form-cont textarea {
+.nf-form-cont:not(.estatein-newsletter) input:not([type="submit"]):not([type="button"]),
+.nf-form-cont:not(.estatein-newsletter) select,
+.nf-form-cont:not(.estatein-newsletter) textarea {
     background: #111 !important;
     color: #fff !important;
     border: 1px solid #333 !important;
@@ -1606,14 +1721,14 @@ p {
 .nf-form-cont textarea {
     min-height: 150px;
 }
-.nf-form-cont input:focus,
-.nf-form-cont select:focus,
-.nf-form-cont textarea:focus {
+.nf-form-cont:not(.estatein-newsletter) input:focus,
+.nf-form-cont:not(.estatein-newsletter) select:focus,
+.nf-form-cont:not(.estatein-newsletter) textarea:focus {
     border-color: var(--accent) !important;
     box-shadow: 0 0 0 0.25rem rgba(112, 59, 247, 0.15) !important;
 }
-.nf-form-cont input[type="submit"],
-.nf-form-cont button {
+.nf-form-cont:not(.estatein-newsletter) input[type="submit"],
+.nf-form-cont:not(.estatein-newsletter) button {
     background: var(--accent) !important;
     color: #fff !important;
     border: 0 !important;
@@ -1631,7 +1746,186 @@ p {
     color: #fff !important;
 }
 
+/* Footer newsletter: icons live on wrappers so Ninja Forms `background` cannot wipe them. */
+.newsletter-form .nf-form-layout,
+.newsletter-form .nf-form-wrap form,
+.newsletter-form .nf-form-cont,
+.newsletter-form .nf-form-content,
+.newsletter-form nf-fields-wrap,
+.newsletter-form nf-field {
+    display: block;
+    position: relative;
+}
+.newsletter-form .nf-field-container {
+    margin-bottom: 0 !important;
+}
+.newsletter-form .nf-row {
+    margin: 0 !important;
+}
+.newsletter-form nf-field:has(.submit-container),
+.newsletter-form .nf-row:has(.submit-container) {
+    position: absolute;
+    right: 8px;
+    top: 0;
+    width: 44px;
+    height: 60px;
+    z-index: 4;
+}
+.newsletter-form .nf-field-label,
+.newsletter-form .nf-form-title {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+.newsletter-form .email-container .nf-field-element,
+.newsletter-field {
+    position: relative;
+}
+.newsletter-icon {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+    display: block;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+.newsletter-icon-email {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.newsletter-icon-send {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.newsletter-form .email-container .nf-field-element::before,
+.newsletter-field::before {
+    content: none;
+}
+.newsletter-form .submit-container .nf-field-element::after {
+    content: none;
+}
+.newsletter-field input[type="email"],
+.newsletter-form .email-container input[type="email"],
+.newsletter-form .nf-form-cont input[type="email"] {
+    height: 60px !important;
+    width: 100% !important;
+    background: var(--surface) !important;
+    background-image: none !important;
+    border: 1px solid var(--border) !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    padding: 0 56px !important;
+    font-family: var(--font) !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+    box-shadow: none !important;
+    position: relative;
+    z-index: 1;
+}
+.newsletter-form input[type="email"]::placeholder {
+    color: var(--muted) !important;
+    opacity: 1;
+}
+.newsletter-form .submit-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 44px;
+    height: 60px;
+    margin: 0 !important;
+    z-index: 4;
+}
+.newsletter-form .submit-container .nf-field,
+.newsletter-form .submit-container .field-wrap,
+.newsletter-form .submit-container .nf-field-element {
+    position: relative;
+    height: 100%;
+    margin: 0;
+}
+.newsletter-form .submit-container input,
+.newsletter-form .submit-container button,
+.newsletter-send {
+    position: relative;
+    z-index: 2;
+    width: 44px !important;
+    height: 44px !important;
+    min-height: 0 !important;
+    margin-top: 8px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    background-image: none !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    text-indent: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden;
+}
+.newsletter-form .submit-container input:focus-visible,
+.newsletter-form .submit-container button:focus-visible,
+.newsletter-send:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+    .hero-reveal {
+        opacity: 0;
+        transform: translateY(16px);
+        animation: estatein-hero-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .hero-text h1.hero-reveal {
+        animation-delay: 0.08s;
+    }
+    .hero-text p.hero-reveal {
+        animation-delay: 0.26s;
+    }
+    .hero-actions .hero-reveal:nth-child(1) {
+        animation-delay: 0.42s;
+    }
+    .hero-actions .hero-reveal:nth-child(2) {
+        animation-delay: 0.54s;
+    }
+    .hero-stats .hero-reveal:nth-child(1) {
+        animation-delay: 0.68s;
+    }
+    .hero-stats .hero-reveal:nth-child(2) {
+        animation-delay: 0.8s;
+    }
+    .hero-stats .hero-reveal:nth-child(3) {
+        animation-delay: 0.92s;
+    }
+    @keyframes estatein-hero-reveal {
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+    .card-reveal {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: var(--card-delay, 0s);
+    }
+    .card-reveal.is-visible {
+        opacity: 1;
+        transform: none;
+    }
+    .feature-service-card.card-reveal.is-visible:hover {
+        transform: translateY(-2px);
+    }
     .content-section,
     .footer-cta {
         opacity: 0;
@@ -1651,8 +1945,27 @@ p {
     a,
     .social-links a,
     .content-section,
-    .footer-cta {
+    .footer-cta,
+    .hamburger,
+    .hamburger-inner,
+    .hamburger-inner::before,
+    .hamburger-inner::after {
         transition: none;
+    }
+    .hero-reveal,
+    .card-reveal,
+    .hero-image,
+    .hero-placeholder,
+    .hero-orbit,
+    .footer-cta-deco {
+        animation: none;
+        transform: none;
+        opacity: 1;
+        will-change: auto;
+        transition: none;
+    }
+    .footer-cta-deco--right {
+        transform: rotate(180deg) scaleY(-1);
     }
     .social-links a:hover {
         transform: none;
