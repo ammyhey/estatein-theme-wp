@@ -1,10 +1,30 @@
 <?php
 if (!defined('ABSPATH')) exit;
-function estatein_render_ninja_form($field='form_shortcode') {
-  $shortcode=estatein_field($field,'option');
-  if (!$shortcode) return;
-  echo do_shortcode($shortcode);
+function estatein_render_ninja_form($field = 'form_shortcode', $post_id = 'option') {
+  estatein_render_form($field, '', $post_id);
 }
+
+/**
+ * Render a Ninja Form from ACF shortcode and/or form ID fields.
+ * Shortcode wins when present; otherwise Form ID is used.
+ */
+function estatein_render_form($shortcode_field, $id_field = '', $post_id = false) {
+  $shortcode = trim((string) estatein_field($shortcode_field, $post_id, ''));
+  $form_id = $id_field !== '' ? trim((string) estatein_field($id_field, $post_id, '')) : '';
+
+  if ($shortcode !== '') {
+    if (ctype_digit($shortcode)) {
+      $shortcode = '[ninja_form id=' . (int) $shortcode . ']';
+    }
+    echo '<div class="estatein-form">' . do_shortcode($shortcode) . '</div>';
+    return;
+  }
+
+  if ($form_id !== '' && ctype_digit($form_id)) {
+    echo '<div class="estatein-form">' . do_shortcode('[ninja_form id=' . (int) $form_id . ']') . '</div>';
+  }
+}
+
 function estatein_breadcrumbs(){ if (is_front_page()) return; echo '<nav aria-label="breadcrumb" class="breadcrumbs mb-4"><a href="'.esc_url(home_url('/')).'">Home</a><span>/</span><span>'.esc_html(wp_strip_all_tags(get_the_title())).'</span></nav>'; }
 function estatein_property_filters(){
   $taxes=['location'=>'Location','property_type'=>'Property Type','property_status'=>'Status'];

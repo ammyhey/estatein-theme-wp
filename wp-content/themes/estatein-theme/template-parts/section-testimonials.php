@@ -1,1 +1,58 @@
-<section class="content-section"><div class="container-xl"><div class="section-heading-row"><div><span class="section-kicker">Testimonials</span><h2><?php echo esc_html(estatein_field('testimonials_heading',false,'What Our Clients Say')); ?></h2><p><?php echo esc_html(estatein_field('testimonials_description',false,'Read the success stories and heartfelt testimonials from our valued clients. Discover why they chose Estatein for their real estate journey.')); ?></p></div><?php echo estatein_button(estatein_field('testimonials_button_label',false,'View All Testimonials'),estatein_field('testimonials_button_url',false,estatein_archive_url('testimonial')),'btn btn-outline-light'); ?></div><div class="row g-4 mt-2"><?php $q=new WP_Query(['post_type'=>'testimonial','posts_per_page'=>(int)estatein_field('testimonials_count',false,3)]); if($q->have_posts()):while($q->have_posts()):$q->the_post(); ?><div class="col-lg-4"><article class="testimonial-card h-100"><div class="stars"><?php echo str_repeat('★',(int)min(5,max(0,estatein_field('rating',get_the_ID(),5)))); ?></div><h3><?php the_title(); ?></h3><p><?php echo esc_html(estatein_field('testimonial_quote',get_the_ID(),get_the_content())); ?></p><div class="client-meta"><?php echo estatein_image('client_photo','thumbnail',get_the_ID(),'client-avatar'); ?><div><strong><?php echo esc_html(estatein_field('client_name',get_the_ID(),get_the_title())); ?></strong><span><?php echo esc_html(estatein_field('client_location',get_the_ID())); ?></span></div></div></article></div><?php endwhile;wp_reset_postdata();else: ?><div class="col-12"><div class="empty-state">Add Testimonials to populate this section.</div></div><?php endif; ?></div></div></section>
+<?php
+if (!defined('ABSPATH')) {
+	exit;
+}
+$posts = estatein_home_cpt_query('testimonial', 'testimonials_count', 6);
+?>
+<section class="content-section" id="testimonials">
+	<div class="container-xl">
+		<div class="section-heading-row">
+			<div>
+				<?php echo estatein_kicker('Testimonials'); ?>
+				<h2><?php echo esc_html(estatein_field('testimonials_heading', false, 'What Our Clients Say')); ?></h2>
+				<p><?php echo esc_html(estatein_field('testimonials_description', false, 'Read the success stories and heartfelt testimonials from our valued clients. Discover why they chose Estatein for their real estate needs.')); ?></p>
+			</div>
+			<?php echo estatein_button(estatein_field('testimonials_button_label', false, 'View All Testimonials'), estatein_field('testimonials_button_url', false, estatein_archive_url('testimonial')), 'btn btn-view-all d-none d-md-inline-flex'); ?>
+		</div>
+
+		<?php if ($posts) : ?>
+			<div class="estatein-slider" data-estatein-slider data-slides="3">
+				<div class="estatein-slider-track">
+					<?php foreach ($posts as $post) :
+						setup_postdata($post);
+						$pid = $post->ID;
+						$rating = (int) min(5, max(0, estatein_field('rating', $pid, 5)));
+						?>
+						<div class="estatein-slide">
+							<article class="testimonial-card h-100">
+								<div class="stars" aria-label="<?php echo esc_attr($rating . ' out of 5 stars'); ?>">
+									<?php for ($s = 0; $s < $rating; $s++) : ?>
+										<?php echo estatein_asset_icon('rating-star', 'rating-star', 44, 44); ?>
+									<?php endfor; ?>
+								</div>
+								<h3><?php echo esc_html(get_the_title($pid)); ?></h3>
+								<p><?php echo esc_html(estatein_field('testimonial_quote', $pid, wp_strip_all_tags(get_post_field('post_content', $pid)))); ?></p>
+								<div class="client-meta">
+									<?php
+									$photo = estatein_image('client_photo', 'thumbnail', $pid, 'client-avatar');
+									echo $photo ?: '<span class="client-avatar client-avatar-fallback" aria-hidden="true"></span>';
+									?>
+									<div>
+										<strong><?php echo esc_html(estatein_field('client_name', $pid, get_the_title($pid))); ?></strong>
+										<span><?php echo esc_html(estatein_field('client_location', $pid)); ?></span>
+									</div>
+								</div>
+							</article>
+						</div>
+					<?php endforeach; wp_reset_postdata(); ?>
+				</div>
+				<?php estatein_slider_controls(); ?>
+			</div>
+			<div class="d-md-none mt-4">
+				<?php echo estatein_button(estatein_field('testimonials_button_label', false, 'View All Testimonials'), estatein_field('testimonials_button_url', false, estatein_archive_url('testimonial')), 'btn btn-view-all w-100'); ?>
+			</div>
+		<?php else : ?>
+			<div class="empty-state"><?php esc_html_e('Add Testimonials to populate this section.', 'estatein'); ?></div>
+		<?php endif; ?>
+	</div>
+</section>

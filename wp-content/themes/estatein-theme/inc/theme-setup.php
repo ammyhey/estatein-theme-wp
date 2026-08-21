@@ -5,7 +5,11 @@ function estatein_setup() {
   add_theme_support('post-thumbnails');
   add_theme_support('html5', ['search-form','comment-form','comment-list','gallery','caption','style','script']);
   add_theme_support('custom-logo', ['height'=>48,'width'=>160,'flex-height'=>true,'flex-width'=>true]);
-  register_nav_menus(['primary'=>'Primary Navigation','footer'=>'Footer Navigation']);
+  register_nav_menus([
+    'primary' => 'Primary Navigation',
+    'footer' => 'Footer Navigation',
+    'header-right-menu' => 'Header Right Menu',
+  ]);
   add_image_size('estatein-property-card', 864, 636, true);
   add_image_size('estatein-card', 1024, 692, true);
 }
@@ -52,9 +56,3 @@ add_action('after_switch_theme','estatein_create_settings_page');
 add_action('admin_init', function () {
   if (current_user_can('manage_options')) estatein_create_settings_page();
 });
-function my_custom_menu_location() {
-    register_nav_menus(array(
-        'header-right-menu' => __('Right Header Menu Location', 'estatein-theme'),
-    ));
-}
-add_action('after_setup_theme', 'my_custom_menu_location');
