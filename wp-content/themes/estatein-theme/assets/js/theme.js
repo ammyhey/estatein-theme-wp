@@ -76,7 +76,8 @@ function initEstateinSliders() {
 			cssEase: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
 			adaptiveHeight: false,
 			responsive: [
-				{ breakpoint: 992, settings: { slidesToShow: 1 } }
+				{ breakpoint: 576, settings: { slidesToShow: 1 } },
+				{ breakpoint: 992, settings: { slidesToShow: 2 } }
 			]
 		});
 

@@ -302,6 +302,12 @@
 		margin-bottom: 30px;
 	}
 }
+@media (max-width: 1199.98px) {
+	.testimonial-card .rating-star {
+		width: 30px;
+		height: 30px;
+	}
+}
 @media (max-width: 991.98px) {
 	.hero-orbit {
 		left: 0;
@@ -360,7 +366,7 @@
 		margin-right: 0;
 	}
 	.estatein-slide {
-		padding: 0;
+		padding: 0 15px;
 	}
 	.estatein-slider-controls {
 		margin-top: 30px;
@@ -404,6 +410,11 @@
 		width: 100%;
 		justify-content: center;
 		text-align: center;
+	}
+}
+@media (max-width: 575.98px) {
+	.estatein-slide {
+		padding: 0;
 	}
 }
 @media (prefers-reduced-motion: reduce) {

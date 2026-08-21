@@ -591,6 +591,7 @@ p {
     gap: 16px;
     margin-top: auto;
     padding-top: 30px;
+    flex-wrap: wrap;
 }
 .property-price {
     min-width: 0;
@@ -1531,6 +1532,7 @@ p {
         flex-direction: row;
         padding-top: 20px;
         gap: 16px;
+        flex-wrap: wrap;
     }
     .btn-property-details {
         flex: 1 1 auto;
@@ -1748,6 +1750,11 @@ p {
     .navbar .navbar-brand {
         width: 113px;
         padding: 13px 0;
+    }
+    .property-price-row {
+        align-items: flex-start;
+        flex-direction: column;
+        flex-wrap: wrap;
     }
 }
 
