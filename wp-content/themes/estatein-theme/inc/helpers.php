@@ -52,9 +52,16 @@ function estatein_icon($name, $class = '') {
 }
 
 function estatein_asset_icon($name, $class = '', $width = 24, $height = 24) {
-  $file = 'assets/icons/' . sanitize_file_name($name) . '.png';
-  $path = get_template_directory() . '/' . $file;
-  if (!file_exists($path)) {
+  $base = 'assets/icons/' . sanitize_file_name($name);
+  $dir = get_template_directory();
+  $file = null;
+  foreach (['svg', 'png'] as $ext) {
+    if (file_exists($dir . '/' . $base . '.' . $ext)) {
+      $file = $base . '.' . $ext;
+      break;
+    }
+  }
+  if (!$file) {
     return '';
   }
   return '<img class="' . esc_attr($class) . '" src="' . esc_url(get_theme_file_uri($file)) . '" alt="" width="' . (int) $width . '" height="' . (int) $height . '" loading="lazy" decoding="async">';

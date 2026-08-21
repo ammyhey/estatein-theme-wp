@@ -20,15 +20,15 @@ if (is_page_template('page-contact.php')) {
 }
 ?>
 <section class="footer-cta">
+	<img class="footer-cta-deco footer-cta-deco--left" src="<?php echo esc_url(get_theme_file_uri('assets/images/abstract/cta-deco-left.svg')); ?>" alt="" width="566" height="308" aria-hidden="true">
+	<img class="footer-cta-deco footer-cta-deco--right" src="<?php echo esc_url(get_theme_file_uri('assets/images/abstract/cta-deco-right.svg')); ?>" alt="" width="725" height="394" aria-hidden="true">
 	<div class="container-xl">
-		<div class="row align-items-end">
-			<div class="col-lg-8">
+		<div class="footer-cta-inner">
+			<div class="footer-cta-copy">
 				<h2><?php echo esc_html($cta_heading); ?></h2>
 				<p><?php echo esc_html($cta_desc); ?></p>
 			</div>
-			<div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-				<?php echo estatein_button($cta_label, $cta_url); ?>
-			</div>
+			<?php echo estatein_button($cta_label, $cta_url, 'btn btn-primary footer-cta-btn'); ?>
 		</div>
 	</div>
 </section>

@@ -49,9 +49,9 @@ $logo = estatein_field('site_logo', 'option');
 				wp_nav_menu([
 					'theme_location' => 'primary',
 					'container'      => false,
-					'menu_class'     => 'navbar-nav align-items-lg-center gap-lg-2',
+					'menu_class'     => 'navbar-nav align-items-lg-center',
 					'fallback_cb'    => function () {
-						echo '<ul class="navbar-nav align-items-lg-center gap-lg-2">';
+						echo '<ul class="navbar-nav align-items-lg-center">';
 						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(home_url('/')) . '">Home</a></li>';
 						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(home_url('/about-us/')) . '">About Us</a></li>';
 						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_archive_url('property')) . '">Properties</a></li>';

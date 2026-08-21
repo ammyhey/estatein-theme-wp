@@ -21,24 +21,23 @@ $feature_arrow = estatein_image_url('hero_feature_arrow', 'full', false);
 		<div class="hero-split">
 			<div class="hero-copy order-2 order-lg-1">
 				<div class="hero-content">
-					<?php echo estatein_kicker('Welcome'); ?>
-					<h1><?php echo nl2br(esc_html(estatein_field('hero_heading', false, 'Discover Your Dream Property with Estatein'))); ?></h1>
-					<p><?php echo esc_html(estatein_field('hero_description', false, 'Your journey to finding the perfect property begins here. Explore our listings to find the home that matches your dreams.')); ?></p>
-					<div class="d-flex flex-wrap gap-3">
+					<div class="hero-text">
+						<h1><?php echo nl2br(esc_html(estatein_field('hero_heading', false, 'Discover Your Dream Property with Estatein'))); ?></h1>
+						<p><?php echo esc_html(estatein_field('hero_description', false, 'Your journey to finding the perfect property begins here. Explore our listings to find the home that matches your dreams.')); ?></p>
+					</div>
+					<div class="hero-actions">
 						<?php echo estatein_button(estatein_field('hero_primary_label', false, 'Learn More'), estatein_field('hero_primary_url', false, home_url('/about-us/')), 'btn btn-outline-light'); ?>
 						<?php echo estatein_button(estatein_field('hero_secondary_label', false, 'Browse Properties'), estatein_field('hero_secondary_url', false, estatein_archive_url('property')), 'btn btn-primary'); ?>
 					</div>
-					<div class="row stats g-3">
+					<div class="hero-stats">
 						<?php
 						$stat_n = ['200+', '10k+', '16+'];
 						$stat_l = ['Happy Customers', 'Properties For Clients', 'Years of Experience'];
 						for ($i = 1; $i <= 3; $i++) :
 							?>
-							<div class="col-12 col-sm-4">
-								<div class="stat-card">
-									<strong><?php echo esc_html(estatein_field('hero_stat_' . $i . '_number', false, $stat_n[ $i - 1 ])); ?></strong>
-									<span><?php echo esc_html(estatein_field('hero_stat_' . $i . '_label', false, $stat_l[ $i - 1 ])); ?></span>
-								</div>
+							<div class="stat-card">
+								<strong><?php echo esc_html(estatein_field('hero_stat_' . $i . '_number', false, $stat_n[ $i - 1 ])); ?></strong>
+								<span><?php echo esc_html(estatein_field('hero_stat_' . $i . '_label', false, $stat_l[ $i - 1 ])); ?></span>
 							</div>
 						<?php endfor; ?>
 					</div>
@@ -62,30 +61,30 @@ $feature_arrow = estatein_image_url('hero_feature_arrow', 'full', false);
 			</div>
 		</div>
 		<div class="hero-feature-bar">
-			<div class="container-xl">
-				<div class="row g-3 g-xl-4">
-					<?php for ($i = 1; $i <= 4; $i++) :
-						$title = estatein_field('hero_feature_' . $i, false, $feature_defaults[ $i ]);
-						$url = estatein_field('hero_feature_' . $i . '_url', false, home_url('/services/'));
-						$icon = estatein_image_url('hero_feature_' . $i . '_icon', 'full', false);
-						?>
-						<div class="col-md-6 col-xl-3">
-							<a class="feature-service-card" href="<?php echo esc_url($url); ?>">
-								<?php if ($icon) : ?>
-									<span class="feature-service-icon">
-										<img src="<?php echo esc_url($icon); ?>" alt="" width="82" height="82" loading="lazy">
-									</span>
-								<?php endif; ?>
-								<?php if ($feature_arrow) : ?>
-									<span class="feature-service-arrow" aria-hidden="true">
-										<img src="<?php echo esc_url($feature_arrow); ?>" alt="" width="26" height="26" loading="lazy">
-									</span>
-								<?php endif; ?>
-								<span class="feature-service-title"><?php echo esc_html($title); ?></span>
-							</a>
-						</div>
-					<?php endfor; ?>
-				</div>
+			<div class="hero-feature-grid">
+				<?php for ($i = 1; $i <= 4; $i++) :
+					$title = estatein_field('hero_feature_' . $i, false, $feature_defaults[ $i ]);
+					$url = estatein_field('hero_feature_' . $i . '_url', false, home_url('/services/'));
+					$icon_i = ( 2 === $i ) ? 4 : ( ( 4 === $i ) ? 2 : $i );
+					$icon = estatein_image_url('hero_feature_' . $icon_i . '_icon', 'full', false);
+					if (!$icon) {
+						$icon = get_theme_file_uri('assets/icons/feature-' . $icon_i . '.svg');
+					}
+					?>
+					<a class="feature-service-card" href="<?php echo esc_url($url); ?>">
+						<?php if ($icon) : ?>
+							<span class="feature-service-icon">
+								<img src="<?php echo esc_url($icon); ?>" alt="" width="82" height="82" loading="lazy">
+							</span>
+						<?php endif; ?>
+						<?php if ($feature_arrow) : ?>
+							<span class="feature-service-arrow" aria-hidden="true">
+								<img src="<?php echo esc_url($feature_arrow); ?>" alt="" width="34" height="34" loading="lazy">
+							</span>
+						<?php endif; ?>
+						<span class="feature-service-title"><?php echo esc_html($title); ?></span>
+					</a>
+				<?php endfor; ?>
 			</div>
 		</div>
 	</section>

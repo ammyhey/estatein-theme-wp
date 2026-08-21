@@ -1,22 +1,28 @@
 .hero-feature-bar {
+	position: relative;
+	z-index: 1;
 	border-top: 1px solid var(--border);
 	border-bottom: 1px solid var(--border);
-	padding: 40px 0;
+	padding: 20px;
 	background: var(--bg);
+	box-shadow: 0 -10px 0 0 #191919, 0 10px 0 0 #191919;
 }
-.hero-feature-bar .container-xl {
-	max-width: 1621px;
+.hero-feature-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 20px;
 }
 .feature-service-card {
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	text-align: center;
-	min-height: 229px;
-	padding: 50px 40px 40px;
-	background: #1a1a1a;
+	min-height: 212px;
+	padding: 40px 20px;
+	gap: 20px;
+	background: var(--surface);
 	border: 1px solid var(--border);
 	border-radius: 12px;
 	color: #fff;
@@ -48,22 +54,23 @@
 }
 .feature-service-arrow {
 	position: absolute;
-	top: 30px;
-	right: 30px;
-	opacity: 0.85;
+	top: 20px;
+	right: 20px;
+	opacity: 1;
 	line-height: 0;
 }
 .feature-service-arrow img {
-	width: 26px;
-	height: 26px;
+	width: 34px;
+	height: 34px;
 	display: block;
 }
 .feature-service-title {
 	display: block;
-	margin-top: 24px;
+	margin-top: 0;
 	font-size: 20px;
 	font-weight: 600;
 	line-height: 1.5;
+	letter-spacing: 0;
 	max-width: none;
 }
 .kicker-icon,
@@ -79,8 +86,8 @@
 /* Align circle with hero H1 (“Discover Your Dream…”) */
 .hero-orbit {
 	position: absolute;
-	left: -87px;
-	top: 118px;
+	left: -96px;
+	top: 144px;
 	margin-top: 0;
 	width: 175px;
 	height: 175px;
@@ -161,7 +168,8 @@
 }
 .estatein-slide {
 	padding: 0 15px;
-	height: auto;
+	height: 100%;
+	display: flex;
 }
 .estatein-slide > article {
 	height: 100%;
@@ -180,15 +188,17 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 24px;
-	margin-top: 40px;
+	margin-top: 50px;
 	padding-top: 20px;
 	border-top: 1px solid var(--border);
+	min-height: 78px;
 }
 .estatein-slider-counter {
 	font-size: 20px;
 	font-weight: 500;
 	color: #fff;
-	letter-spacing: 0.02em;
+	letter-spacing: 0;
+	line-height: 1.5;
 }
 .estatein-slider-counter .current {
 	color: #fff;
@@ -211,16 +221,22 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	padding: 0;
+	padding: 14px;
 	cursor: pointer;
-	transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+	transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.estatein-slider-btn svg {
+	width: 30px;
+	height: 30px;
+	display: block;
+	flex-shrink: 0;
 }
 .estatein-slider-btn:hover:not(:disabled) {
 	background: #222;
 	border-color: #333;
 }
 .estatein-slider-btn:disabled {
-	opacity: 0.35;
+	color: #808080;
 	cursor: default;
 }
 .faq-card {
@@ -234,36 +250,72 @@
 .testimonial-card .stars {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 4px;
+	gap: 10px;
 	letter-spacing: 0;
-	margin-bottom: 28px;
+	margin-bottom: 40px;
 }
 .testimonial-card .rating-star {
 	width: 44px;
 	height: 44px;
-	object-fit: contain;
 	display: block;
+	flex-shrink: 0;
 }
 
-@media (max-width: 991.98px) {
-	.hero-orbit {
-		left: auto;
-		right: 20px;
-		top: 24px;
-		margin-top: 0;
-		width: 120px;
-		height: 120px;
-	}
-	.hero-orbit-img {
-		width: 120px;
-		height: 120px;
+@media (max-width: 1599.98px) and (min-width: 992px) {
+	.hero-feature-bar {
+		padding: 16px;
 	}
 	.feature-service-card {
 		min-height: 180px;
-		padding: 36px 22px 28px;
+		padding: 30px 16px;
+	}
+	.feature-service-title {
+		font-size: 16px;
+	}
+}
+@media (max-width: 991.98px) {
+	.hero-orbit {
+		left: 0;
+		right: auto;
+		top: auto;
+		bottom: 0;
+		margin-top: 0;
+		width: 117px;
+		height: 117px;
+	}
+	.hero-orbit-img {
+		width: 117px;
+		height: 117px;
+	}
+	.hero-feature-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
 	}
 	.hero-feature-bar {
-		padding: 28px 0;
+		padding: 10px;
+	}
+	.feature-service-card {
+		min-height: 144px;
+		padding: 20px 14px;
+		gap: 14px;
+	}
+	.feature-service-icon,
+	.feature-service-icon img {
+		width: 48px;
+		height: 48px;
+	}
+	.feature-service-arrow,
+	.feature-service-arrow img {
+		width: 26px;
+		height: 26px;
+	}
+	.feature-service-arrow {
+		top: 20px;
+		right: 14px;
+	}
+	.feature-service-title {
+		font-size: 14px;
+		line-height: 1.5;
 	}
 	.estatein-slider-btn {
 		width: 48px;
@@ -271,6 +323,10 @@
 	}
 	.estatein-slider-controls {
 		margin-top: 28px;
+		min-height: 0;
+	}
+	.estatein-slider-counter {
+		font-size: 14px;
 	}
 }
 @media (prefers-reduced-motion: reduce) {
