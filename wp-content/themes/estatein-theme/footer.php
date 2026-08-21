@@ -75,30 +75,28 @@ if (is_page_template('page-contact.php')) {
             </div>
         </div>
     </div>
-    <hr>
     <div class="footer-bottom">
-        <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
-            <div class="container-xl">
-                <div>
+        <div class="container-xl">
+            <div class="footer-bottom-inner">
+                <div class="footer-legal">
                     <span><?php echo esc_html(estatein_field('footer_copyright', 'option', '© ' . date('Y') . ' Estatein. All Rights Reserved.')); ?></span>
-                    <span class="ms-md-4"><a href="<?php echo esc_url(estatein_nav_url(estatein_field('footer_privacy_url', 'option', ''))); ?>"><?php echo esc_html(estatein_field('footer_privacy_text', 'option', 'Terms & Conditions')); ?></a></span>
+                    <a class="footer-legal-link" href="<?php echo esc_url(estatein_nav_url(estatein_field('footer_privacy_url', 'option', ''))); ?>"><?php echo esc_html(estatein_field('footer_privacy_text', 'option', 'Terms & Conditions')); ?></a>
                 </div>
                 <div class="social-links">
                     <?php
-                    $social = false;
-                    for ($i = 1; $i <= 4; $i++) {
-                        $url = estatein_field('social_link_' . $i, 'option');
-                        if ($url) {
-                            $social = true;
-                            echo '<a href="' . esc_url($url) . '" aria-label="Social link">' . estatein_icon('arrow-up-right') . '</a>';
-                        }
-                    }
-                    if (!$social) {
-                        foreach (['#', '#', '#', '#'] as $url) {
-                            echo '<a href="' . esc_url($url) . '" aria-label="Social">' . estatein_icon('arrow-up-right') . '</a>';
-                        }
-                    }
-                    ?>
+                    $socials = [
+                        ['facebook', 'Facebook', estatein_field('social_link_1', 'option', '#')],
+                        ['twitter', 'Twitter', estatein_field('social_link_2', 'option', '#')],
+                        ['linkedin', 'LinkedIn', estatein_field('social_link_3', 'option', '#')],
+                        ['youtube', 'YouTube', estatein_field('social_link_4', 'option', '#')],
+                    ];
+                    foreach ($socials as $social) :
+                        $icon = get_theme_file_uri('assets/icons/social-' . $social[0] . '.png');
+                        ?>
+                        <a href="<?php echo esc_url($social[2] ?: '#'); ?>" aria-label="<?php echo esc_attr($social[1]); ?>">
+                            <img src="<?php echo esc_url($icon); ?>" alt="" width="20" height="20">
+                        </a>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
