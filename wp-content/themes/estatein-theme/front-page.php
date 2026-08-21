@@ -13,7 +13,7 @@ $feature_defaults = [
 $hero_fallback = get_theme_file_uri('assets/images/home/hero.webp');
 $hero_img = estatein_image('hero_image', 'large', false, 'hero-image');
 $orbit_url = estatein_image_url('hero_orbit_image', 'full', false);
-$orbit_link = estatein_field('hero_orbit_url', false, estatein_archive_url('property'));
+$orbit_link = estatein_nav_url(estatein_field('hero_orbit_url', false, ''));
 $feature_arrow = estatein_image_url('hero_feature_arrow', 'full', false);
 ?>
 <main id="content">
@@ -26,8 +26,8 @@ $feature_arrow = estatein_image_url('hero_feature_arrow', 'full', false);
 						<p><?php echo esc_html(estatein_field('hero_description', false, 'Your journey to finding the perfect property begins here. Explore our listings to find the home that matches your dreams.')); ?></p>
 					</div>
 					<div class="hero-actions">
-						<?php echo estatein_button(estatein_field('hero_primary_label', false, 'Learn More'), estatein_field('hero_primary_url', false, home_url('/about-us/')), 'btn btn-outline-light'); ?>
-						<?php echo estatein_button(estatein_field('hero_secondary_label', false, 'Browse Properties'), estatein_field('hero_secondary_url', false, estatein_archive_url('property')), 'btn btn-primary'); ?>
+						<?php echo estatein_button(estatein_field('hero_primary_label', false, 'Learn More'), estatein_nav_url(estatein_field('hero_primary_url', false, '')), 'btn btn-outline-light'); ?>
+						<?php echo estatein_button(estatein_field('hero_secondary_label', false, 'Browse Properties'), estatein_nav_url(estatein_field('hero_secondary_url', false, '')), 'btn btn-primary'); ?>
 					</div>
 					<div class="hero-stats">
 						<?php
@@ -64,7 +64,7 @@ $feature_arrow = estatein_image_url('hero_feature_arrow', 'full', false);
 			<div class="hero-feature-grid">
 				<?php for ($i = 1; $i <= 4; $i++) :
 					$title = estatein_field('hero_feature_' . $i, false, $feature_defaults[ $i ]);
-					$url = estatein_field('hero_feature_' . $i . '_url', false, home_url('/services/'));
+					$url = estatein_nav_url(estatein_field('hero_feature_' . $i . '_url', false, ''));
 					$icon_i = ( 2 === $i ) ? 4 : ( ( 4 === $i ) ? 2 : $i );
 					$icon = estatein_image_url('hero_feature_' . $icon_i . '_icon', 'full', false);
 					if (!$icon) {

@@ -12,7 +12,7 @@ $posts = estatein_home_properties_query();
 				<h2><?php echo esc_html(estatein_field('featured_heading', false, 'Featured Properties')); ?></h2>
 				<p><?php echo esc_html(estatein_field('featured_description', false, 'Explore our handpicked selection of featured properties. Each listing offers exceptional homes and investments ready to fulfill your unique vision.')); ?></p>
 			</div>
-			<?php echo estatein_button(estatein_field('featured_button_label', false, 'View All Properties'), estatein_field('featured_button_url', false, estatein_archive_url('property')), 'btn btn-view-all d-none d-md-inline-flex'); ?>
+			<?php echo estatein_button(estatein_field('featured_button_label', false, 'View All Properties'), estatein_nav_url(estatein_field('featured_button_url', false, '')), 'btn btn-view-all d-none d-lg-inline-flex'); ?>
 		</div>
 
 		<?php if ($posts) : ?>
@@ -45,17 +45,14 @@ $posts = estatein_home_properties_query();
 											<small><?php esc_html_e('Price', 'estatein'); ?></small>
 											<strong><?php echo esc_html(estatein_currency(estatein_field('price', $pid))); ?></strong>
 										</div>
-										<a class="btn btn-primary btn-property-details" href="<?php echo esc_url(get_permalink($pid)); ?>"><?php esc_html_e('View Property Details', 'estatein'); ?></a>
+										<a class="btn btn-primary btn-property-details" href="<?php echo esc_url(estatein_single_url($pid)); ?>"><?php esc_html_e('View Property Details', 'estatein'); ?></a>
 									</div>
 								</div>
 							</article>
 						</div>
 					<?php endforeach; wp_reset_postdata(); ?>
 				</div>
-				<?php estatein_slider_controls(); ?>
-			</div>
-			<div class="d-md-none mt-4">
-				<?php echo estatein_button(estatein_field('featured_button_label', false, 'View All Properties'), estatein_field('featured_button_url', false, estatein_archive_url('property')), 'btn btn-view-all w-100'); ?>
+				<?php estatein_slider_controls(estatein_button(estatein_field('featured_button_label', false, 'View All Properties'), estatein_nav_url(estatein_field('featured_button_url', false, '')), 'btn btn-view-all')); ?>
 			</div>
 		<?php else : ?>
 			<div class="empty-state"><?php esc_html_e('Add Property posts to populate this section.', 'estatein'); ?></div>

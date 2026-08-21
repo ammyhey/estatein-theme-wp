@@ -12,7 +12,7 @@ $posts = estatein_home_cpt_query('testimonial', 'testimonials_count', 6);
 				<h2><?php echo esc_html(estatein_field('testimonials_heading', false, 'What Our Clients Say')); ?></h2>
 				<p><?php echo esc_html(estatein_field('testimonials_description', false, 'Read the success stories and heartfelt testimonials from our valued clients. Discover why they chose Estatein for their real estate needs.')); ?></p>
 			</div>
-			<?php echo estatein_button(estatein_field('testimonials_button_label', false, 'View All Testimonials'), estatein_field('testimonials_button_url', false, estatein_archive_url('testimonial')), 'btn btn-view-all d-none d-md-inline-flex'); ?>
+			<?php echo estatein_button(estatein_field('testimonials_button_label', false, 'View All Testimonials'), estatein_nav_url(estatein_field('testimonials_button_url', false, '')), 'btn btn-view-all d-none d-lg-inline-flex'); ?>
 		</div>
 
 		<?php if ($posts) : ?>
@@ -46,10 +46,7 @@ $posts = estatein_home_cpt_query('testimonial', 'testimonials_count', 6);
 						</div>
 					<?php endforeach; wp_reset_postdata(); ?>
 				</div>
-				<?php estatein_slider_controls(); ?>
-			</div>
-			<div class="d-md-none mt-4">
-				<?php echo estatein_button(estatein_field('testimonials_button_label', false, 'View All Testimonials'), estatein_field('testimonials_button_url', false, estatein_archive_url('testimonial')), 'btn btn-view-all w-100'); ?>
+				<?php estatein_slider_controls(estatein_button(estatein_field('testimonials_button_label', false, 'View All Testimonials'), estatein_nav_url(estatein_field('testimonials_button_url', false, '')), 'btn btn-view-all')); ?>
 			</div>
 		<?php else : ?>
 			<div class="empty-state"><?php esc_html_e('Add Testimonials to populate this section.', 'estatein'); ?></div>

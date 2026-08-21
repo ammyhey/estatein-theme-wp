@@ -38,7 +38,7 @@ function estatein_image_url($field, $size = 'large', $post_id = false) {
   return wp_get_attachment_image_url((int) $img, $size) ?: '';
 }
 function estatein_button($label,$url='#',$class='btn btn-primary') { if (!$label) return ''; return '<a class="'.esc_attr($class).'" href="'.esc_url($url).'">'.esc_html($label).'</a>'; }
-function estatein_archive_url($post_type){ $p=get_post_type_object($post_type); return $p && $p->has_archive ? get_post_type_archive_link($post_type) : home_url('/'); }
+function estatein_archive_url($post_type){ $p=get_post_type_object($post_type); $link=($p && $p->has_archive && !empty($p->publicly_queryable)) ? get_post_type_archive_link($post_type) : ''; return $link ?: ESTATEIN_NAV_PLACEHOLDER; }
 function estatein_currency($value){ if ($value===''||$value===null) return ''; return '$'.number_format((float)$value,0,'.',','); }
 
 function estatein_icon($name, $class = '') {
@@ -71,6 +71,36 @@ function estatein_term_name($post_id, $taxonomy, $default = '') {
   $terms = get_the_terms($post_id, $taxonomy);
   if (is_wp_error($terms) || empty($terms)) return $default;
   return $terms[0]->name;
+}
+
+function estatein_footer_nav_columns() {
+	return [
+		1 => [
+			'slug'  => 'home',
+			'title' => 'Home',
+			'links' => ['Hero Section', 'Features', 'Properties', 'Testimonials', "FAQ's"],
+		],
+		2 => [
+			'slug'  => 'about',
+			'title' => 'About Us',
+			'links' => ['Our Story', 'Our Works', 'How It Works', 'Our Team', 'Our Clients'],
+		],
+		3 => [
+			'slug'  => 'properties',
+			'title' => 'Properties',
+			'links' => ['Portfolio', 'Categories'],
+		],
+		4 => [
+			'slug'  => 'services',
+			'title' => 'Services',
+			'links' => ['Valuation Mastery', 'Strategic Marketing', 'Negotiation Wizardry', 'Closing Success', 'Property Management'],
+		],
+		5 => [
+			'slug'  => 'contact',
+			'title' => 'Contact Us',
+			'links' => ['Contact Form', 'Our Offices'],
+		],
+	];
 }
 
 function estatein_kicker($label = '') {

@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 <?php
 $announcement = estatein_field('announcement_text', 'option', 'Discover Your Dream Property with Estatein');
 $announcement_link = estatein_field('announcement_link_text', 'option', 'Learn More');
-$announcement_url = estatein_field('announcement_link_url', 'option', home_url('/about-us/'));
+$announcement_url = estatein_nav_url(estatein_field('announcement_link_url', 'option', ''));
 $logo = estatein_field('site_logo', 'option');
 ?>
 <div class="announcement-bar">
@@ -53,12 +53,12 @@ $logo = estatein_field('site_logo', 'option');
 					'fallback_cb'    => function () {
 						echo '<ul class="navbar-nav align-items-lg-center">';
 						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(home_url('/')) . '">Home</a></li>';
-						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(home_url('/about-us/')) . '">About Us</a></li>';
-						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_archive_url('property')) . '">Properties</a></li>';
-						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(home_url('/services/')) . '">Services</a></li></ul>';
+						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_nav_url()) . '">About Us</a></li>';
+						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_nav_url()) . '">Properties</a></li>';
+						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_nav_url()) . '">Services</a></li></ul>';
 					},
 				]);
-				$contact_url = estatein_field('header_contact_url', 'option', home_url('/contact-us/'));
+				$contact_url = estatein_nav_url(estatein_field('header_contact_url', 'option', ''));
 				$contact_txt = estatein_field('header_contact_text', 'option', 'Contact Us');
 				echo '<a class="btn btn-outline-light ms-lg-auto mt-3 mt-lg-0" href="' . esc_url($contact_url) . '">' . esc_html($contact_txt) . '</a>';
 				?>
