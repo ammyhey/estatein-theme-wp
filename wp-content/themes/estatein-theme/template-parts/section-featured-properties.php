@@ -21,7 +21,7 @@ $posts = estatein_home_properties_query();
 					<?php foreach ($posts as $post) :
 						setup_postdata($post);
 						$pid   = $post->ID;
-						$type  = estatein_field('card_building_label', $pid, estatein_term_name($pid, 'property_type', 'Villa'));
+						$type  = estatein_field('card_building_label', $pid, 'Villa');
 						$beds  = estatein_field('bedrooms', $pid, '—');
 						$baths = estatein_field('bathrooms', $pid, '—');
 						?>

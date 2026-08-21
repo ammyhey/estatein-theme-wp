@@ -55,7 +55,7 @@ $feature_arrow = estatein_image_url('hero_feature_arrow', 'full', false);
 				?>
 				<?php if ($orbit_url) : ?>
 					<a class="hero-orbit" href="<?php echo esc_url($orbit_link); ?>" data-parallax="orbit">
-						<img class="hero-orbit-img" src="<?php echo esc_url($orbit_url); ?>" alt="<?php echo esc_attr(estatein_field('square_cta_text', false, 'Discover Your Dream Property')); ?>" width="175" height="175" loading="lazy">
+						<img class="hero-orbit-img" src="<?php echo esc_url($orbit_url); ?>" alt="<?php echo esc_attr__('Discover Your Dream Property', 'estatein'); ?>" width="175" height="175" loading="lazy">
 					</a>
 				<?php endif; ?>
 			</div>

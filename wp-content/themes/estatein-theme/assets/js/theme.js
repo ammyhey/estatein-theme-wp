@@ -146,7 +146,7 @@ function initOrbitParallax() {
 }
 
 function initSectionFade() {
-	var els = document.querySelectorAll('.content-section, .footer-cta, .page-hero');
+	var els = document.querySelectorAll('.content-section, .footer-cta');
 	if (!els.length) {
 		return;
 	}

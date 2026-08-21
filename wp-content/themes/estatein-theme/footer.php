@@ -2,22 +2,11 @@
 if (!defined('ABSPATH')) {
 	exit;
 }
-$cta_heading = 'Start Your Real Estate Journey Today';
-$cta_desc = 'Your dream property is just a click away. Whether you are looking for a new home, a strategic investment, or expert real estate guidance, Estatein is here to assist you every step of the way.';
-$cta_label = 'Explore Properties';
-$cta_url = estatein_nav_url();
-
-if (is_page_template('page-contact.php')) {
-	$cta_heading = estatein_field('contact_cta_heading', false, $cta_heading);
-	$cta_desc = estatein_field('contact_cta_description', false, $cta_desc);
-	$cta_label = estatein_field('contact_cta_button_label', false, $cta_label);
-	$cta_url = estatein_nav_url(estatein_field('contact_cta_button_url', false, ''));
-} elseif (is_front_page()) {
-	$cta_heading = estatein_field('footer_cta_heading', false, $cta_heading);
-	$cta_desc = estatein_field('footer_cta_description', false, $cta_desc);
-	$cta_label = estatein_field('footer_cta_button_label', false, $cta_label);
-	$cta_url = estatein_nav_url(estatein_field('footer_cta_button_url', false, ''));
-}
+$front_id = (int) get_option('page_on_front');
+$cta_heading = estatein_field('footer_cta_heading', $front_id, 'Start Your Real Estate Journey Today');
+$cta_desc = estatein_field('footer_cta_description', $front_id, 'Your dream property is just a click away. Whether you are looking for a new home, a strategic investment, or expert real estate guidance, Estatein is here to assist you every step of the way.');
+$cta_label = estatein_field('footer_cta_button_label', $front_id, 'Explore Properties');
+$cta_url = estatein_nav_url(estatein_field('footer_cta_button_url', $front_id, ''));
 ?>
 <section class="footer-cta">
 	<img class="footer-cta-deco footer-cta-deco--left" src="<?php echo esc_url(get_theme_file_uri('assets/images/abstract/cta-deco-left.svg')); ?>" alt="" width="566" height="308" aria-hidden="true">
