@@ -1,22 +1,123 @@
 <?php
+/**
+ * Content model.
+ *
+ * Property has public permalinks for cards, but the single view redirects home.
+ * FAQ and Testimonial stay admin-only.
+ */
 if (!defined('ABSPATH')) exit;
-function estatein_register_content(){
-  $types=[
-    'property'=>['Properties','Property','properties',true],
-    'faq'=>['FAQs','FAQ','faqs',true],
-    'testimonial'=>['Testimonials','Testimonial','testimonials',true],
-    'team_member'=>['Our Team','Team Member','our-team',true],
-    'client'=>['Clients','Client','clients',true],
-  ];
-  foreach($types as $slug=>$v){ [$plural,$singular,$rewrite,$archive]=$v; register_post_type($slug,['labels'=>['name'=>$plural,'singular_name'=>$singular,'add_new_item'=>'Add '.$singular,'edit_item'=>'Edit '.$singular],'public'=>true,'show_in_rest'=>true,'has_archive'=>$archive,'rewrite'=>['slug'=>$rewrite,'with_front'=>false],'menu_icon'=>'dashicons-building','supports'=>['title','editor','thumbnail','excerpt','page-attributes']]); }
-  register_taxonomy('location',['property'],['labels'=>['name'=>'Locations','singular_name'=>'Location'],'public'=>true,'show_in_rest'=>true,'hierarchical'=>true,'rewrite'=>['slug'=>'property-location']]);
-  register_taxonomy('property_type',['property'],['labels'=>['name'=>'Property Types','singular_name'=>'Property Type'],'public'=>true,'show_in_rest'=>true,'hierarchical'=>true,'rewrite'=>['slug'=>'property-type']]);
-  register_taxonomy('property_status',['property'],['labels'=>['name'=>'Property Status','singular_name'=>'Property Status'],'public'=>true,'show_in_rest'=>true,'hierarchical'=>false,'rewrite'=>['slug'=>'property-status']]);
-  register_taxonomy('pricing_range',['property'],['labels'=>['name'=>'Pricing Ranges','singular_name'=>'Pricing Range'],'public'=>true,'show_in_rest'=>true,'hierarchical'=>true,'rewrite'=>['slug'=>'pricing-range']]);
-  register_taxonomy('property_size_range',['property'],['labels'=>['name'=>'Property Size Ranges','singular_name'=>'Property Size Range'],'public'=>true,'show_in_rest'=>true,'hierarchical'=>true,'rewrite'=>['slug'=>'property-size']]);
-  register_taxonomy('build_year',['property'],['labels'=>['name'=>'Build Years','singular_name'=>'Build Year'],'public'=>true,'show_in_rest'=>true,'hierarchical'=>false,'rewrite'=>['slug'=>'build-year']]);
-  register_taxonomy('service_type',['property'],['labels'=>['name'=>'Service Types','singular_name'=>'Service Type'],'public'=>false,'show_ui'=>true,'show_in_rest'=>true,'hierarchical'=>true]);
+
+function estatein_register_content() {
+	register_post_type('property', [
+		'labels' => [
+			'name'          => 'Properties',
+			'singular_name' => 'Property',
+			'add_new_item'  => 'Add Property',
+			'edit_item'     => 'Edit Property',
+		],
+		'public'              => true,
+		'publicly_queryable'  => true,
+		'exclude_from_search' => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => false,
+		'show_in_rest'        => true,
+		'has_archive'         => false,
+		'rewrite'             => ['slug' => 'property'],
+		'query_var'           => true,
+		'menu_icon'           => 'dashicons-building',
+		'supports'            => ['title', 'editor', 'thumbnail', 'excerpt'],
+	]);
+
+	$admin_only = [
+		'faq'         => ['FAQs', 'FAQ', 'dashicons-editor-help'],
+		'testimonial' => ['Testimonials', 'Testimonial', 'dashicons-format-quote'],
+	];
+	foreach ($admin_only as $slug => $v) {
+		[$plural, $singular, $icon] = $v;
+		register_post_type($slug, [
+			'labels'              => ['name' => $plural, 'singular_name' => $singular, 'add_new_item' => 'Add ' . $singular, 'edit_item' => 'Edit ' . $singular],
+			'public'              => false,
+			'publicly_queryable'  => false,
+			'exclude_from_search' => true,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_nav_menus'   => false,
+			'show_in_rest'        => true,
+			'has_archive'         => false,
+			'rewrite'             => false,
+			'query_var'           => false,
+			'menu_icon'           => $icon,
+			'supports'            => ['title', 'thumbnail', 'excerpt'],
+		]);
+	}
+
+	estatein_register_property_taxonomies();
 }
-add_action('init','estatein_register_content');
-function estatein_flush_rewrite(){ if(get_option('estatein_rewrite_version')!=='1'){flush_rewrite_rules();update_option('estatein_rewrite_version','1');} }
-add_action('init','estatein_flush_rewrite',99);
+add_action('init', 'estatein_register_content');
+
+function estatein_register_property_taxonomies() {
+	$taxes = [
+		'featured_property' => [
+			'label'        => 'Featured Property',
+			'singular'     => 'Featured',
+			'hierarchical' => true,
+		],
+		'bedroom' => [
+			'label'        => 'Bedrooms',
+			'singular'     => 'Bedroom',
+			'hierarchical' => true,
+		],
+		'bathroom' => [
+			'label'        => 'Bathrooms',
+			'singular'     => 'Bathroom',
+			'hierarchical' => true,
+		],
+		'property_type' => [
+			'label'        => 'Property Types',
+			'singular'     => 'Property Type',
+			'hierarchical' => true,
+		],
+	];
+
+	foreach ($taxes as $slug => $args) {
+		register_taxonomy($slug, 'property', [
+			'labels'            => [
+				'name'          => $args['label'],
+				'singular_name' => $args['singular'],
+				'search_items'  => 'Search ' . $args['label'],
+				'all_items'     => 'All ' . $args['label'],
+				'edit_item'     => 'Edit ' . $args['singular'],
+				'add_new_item'  => 'Add New ' . $args['singular'],
+			],
+			'public'            => false,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'hierarchical'      => $args['hierarchical'],
+			'rewrite'           => false,
+			'meta_box_cb'       => 'post_categories_meta_box',
+		]);
+	}
+}
+
+function estatein_redirect_property_singles() {
+	if (is_singular('property')) {
+		wp_safe_redirect(home_url('/'), 302);
+		exit;
+	}
+}
+add_action('template_redirect', 'estatein_redirect_property_singles');
+
+function estatein_maybe_flush_rewrites() {
+	if (get_option('estatein_flush_rewrites')) {
+		flush_rewrite_rules(false);
+		delete_option('estatein_flush_rewrites');
+	}
+}
+add_action('init', 'estatein_maybe_flush_rewrites', 20);
+
+function estatein_request_rewrite_flush() {
+	update_option('estatein_flush_rewrites', 1);
+}
+add_action('after_switch_theme', 'estatein_request_rewrite_flush');

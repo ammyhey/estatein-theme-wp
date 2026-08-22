@@ -5,16 +5,13 @@ function estatein_setup() {
   add_theme_support('post-thumbnails');
   add_theme_support('html5', ['search-form','comment-form','comment-list','gallery','caption','style','script']);
   add_theme_support('custom-logo', ['height'=>48,'width'=>160,'flex-height'=>true,'flex-width'=>true]);
-  register_nav_menus(['primary'=>'Primary Navigation','footer'=>'Footer Navigation']);
+  register_nav_menus([
+    'primary' => 'Primary Navigation',
+    'footer'  => 'Footer Navigation',
+  ]);
   add_image_size('estatein-property-card', 864, 636, true);
-  add_image_size('estatein-card', 1024, 692, true);
 }
 add_action('after_setup_theme','estatein_setup');
-
-function estatein_widgets() {
-  register_sidebar(['name'=>'Footer','id'=>'footer','before_widget'=>'<div class="footer-widget mb-4">','after_widget'=>'</div>','before_title'=>'<h3 class="footer-heading">','after_title'=>'</h3>']);
-}
-add_action('widgets_init','estatein_widgets');
 
 /**
  * ACF Free does not provide the Pro Options Page feature.
@@ -39,7 +36,7 @@ function estatein_create_settings_page() {
     'post_name'    => 'estatein-settings',
     'post_status'  => 'publish',
     'post_type'    => 'page',
-    'post_content' => 'Use the fields below to manage Estatein global header, footer, announcement, newsletter, social links, and property archive settings.',
+    'post_content' => 'Use the fields below to manage Estatein global header, footer, announcement, newsletter, and social links.',
   ]);
 
   if (!is_wp_error($id) && $id) {
@@ -52,9 +49,11 @@ add_action('after_switch_theme','estatein_create_settings_page');
 add_action('admin_init', function () {
   if (current_user_can('manage_options')) estatein_create_settings_page();
 });
-function my_custom_menu_location() {
-    register_nav_menus(array(
-        'header-right-menu' => __('Right Header Menu Location', 'estatein-theme'),
-    ));
+
+function estatein_redirect_settings_page() {
+  if (is_page_template('page-estatein-settings.php')) {
+    wp_safe_redirect(home_url('/'));
+    exit;
+  }
 }
-add_action('after_setup_theme', 'my_custom_menu_location');
+add_action('template_redirect', 'estatein_redirect_settings_page');
