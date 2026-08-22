@@ -57,3 +57,45 @@ function estatein_redirect_settings_page() {
   }
 }
 add_action('template_redirect', 'estatein_redirect_settings_page');
+
+function estatein_login_logo_src() {
+  if (function_exists('estatein_image_url')) {
+    $uploaded = estatein_image_url('site_logo', 'full', 'option');
+    if ($uploaded) {
+      return $uploaded;
+    }
+  }
+  return get_theme_file_uri('assets/images/logo.svg');
+}
+
+function estatein_login_logo() {
+  $logo = estatein_login_logo_src();
+  ?>
+  <style>
+    body.login {
+      background: #141414;
+    }
+    #login h1 a,
+    .login h1 a {
+      background-image: url("<?php echo esc_url($logo); ?>");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      width: 161px;
+      height: 48px;
+      margin-bottom: 24px;
+    }
+  </style>
+  <?php
+}
+add_action('login_enqueue_scripts', 'estatein_login_logo');
+
+function estatein_login_headerurl() {
+  return home_url('/');
+}
+add_filter('login_headerurl', 'estatein_login_headerurl');
+
+function estatein_login_headertext() {
+  return get_bloginfo('name');
+}
+add_filter('login_headertext', 'estatein_login_headertext');
