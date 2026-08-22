@@ -600,19 +600,19 @@ p {
     margin-bottom: 0;
 }
 .property-excerpt-more {
-    color: var(--accent);
-    font-size: 18px;
-    font-weight: 500;
+    color: var(--text);
     line-height: 1.5;
-    text-decoration: none;
+    text-decoration: underline;
     margin-left: 4px;
     white-space: nowrap;
+    transition: 0.3s all ease-in-out;
 }
 .property-excerpt-more:hover,
 .property-excerpt-more:focus-visible {
     color: var(--accent);
     text-decoration: none;
     opacity: 1;
+    transition: 0.3s all ease-in-out;
 }
 .property-meta {
     display: flex;
