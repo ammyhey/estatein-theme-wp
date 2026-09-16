@@ -1,4 +1,13 @@
 <?php
+/**
+ * Announcement bar and primary navigation.
+ *
+ * Copy comes from the "Estatein — Global Settings" group on the Estatein Settings
+ * page, read with `estatein_field( $key, 'option' )`.
+ *
+ * @package Estatein
+ */
+
 if (!defined('ABSPATH')) {
 	exit;
 }
@@ -13,19 +22,19 @@ if (!defined('ABSPATH')) {
 	</noscript>
 </head>
 <body <?php body_class(); ?>>
-<?php wp_body_open(); ?>
 <?php
-$announcement = estatein_field('announcement_text', 'option', 'Discover Your Dream Property with Estatein');
-$announcement_link = estatein_field('announcement_link_text', 'option', 'Learn More');
-$announcement_url = estatein_nav_url(estatein_field('announcement_link_url', 'option', ''));
-$logo = estatein_field('site_logo', 'option');
+wp_body_open();
+
+$announcement_url  = estatein_nav_url(estatein_field('announcement_link_url', 'option', ''));
+$contact_url       = estatein_nav_url(estatein_field('header_contact_url', 'option', ''));
+$logo              = estatein_image('site_logo', 'medium', 'option', 'site-logo img-fluid', get_bloginfo('name'), true);
 ?>
 <aside class="announcement-bar" aria-label="<?php esc_attr_e('Announcement', 'estatein'); ?>">
 	<div class="container-xl">
 		<div class="announcement-bar-inner d-flex justify-content-center align-items-center gap-2 text-center position-relative py-2">
 			<?php echo estatein_icon('sparkle', 'announce-spark'); ?>
-			<span><?php echo esc_html($announcement); ?></span>
-			<a href="<?php echo esc_url($announcement_url); ?>"><?php echo esc_html($announcement_link); ?></a>
+			<span><?php echo esc_html(estatein_field('announcement_text', 'option')); ?></span>
+			<a href="<?php echo esc_url($announcement_url); ?>"><?php echo esc_html(estatein_field('announcement_link_text', 'option')); ?></a>
 			<button class="announcement-close" type="button" aria-label="<?php esc_attr_e('Close announcement', 'estatein'); ?>">
 				<img src="<?php echo esc_url(get_theme_file_uri('assets/images/close-button.svg')); ?>" alt="" width="28" height="28" aria-hidden="true">
 			</button>
@@ -38,9 +47,13 @@ $logo = estatein_field('site_logo', 'option');
 			<a class="navbar-brand" href="<?php echo esc_url(home_url('/')); ?>">
 				<?php
 				if ($logo) {
-					echo estatein_image('site_logo', 'medium', 'option', 'site-logo img-fluid', get_bloginfo('name'));
+					echo $logo; // Escaped by estatein_image().
 				} else {
-					echo '<img class="site-logo img-fluid" src="' . esc_url(get_theme_file_uri('assets/images/logo.svg')) . '" alt="' . esc_attr(get_bloginfo('name')) . '">';
+					printf(
+						'<img class="site-logo img-fluid" src="%s" alt="%s" width="161" height="48">',
+						esc_url(get_theme_file_uri('assets/images/logo.svg')),
+						esc_attr(get_bloginfo('name'))
+					);
 				}
 				?>
 			</a>
@@ -53,17 +66,14 @@ $logo = estatein_field('site_logo', 'option');
 					'theme_location' => 'primary',
 					'container'      => false,
 					'menu_class'     => 'navbar-nav align-items-lg-center',
-					'fallback_cb'    => function () {
-						echo '<ul class="navbar-nav align-items-lg-center">';
-						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(home_url('/')) . '">Home</a></li>';
-						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_nav_url()) . '">About Us</a></li>';
-						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_nav_url()) . '">Properties</a></li>';
-						echo '<li class="nav-item"><a class="nav-link" href="' . esc_url(estatein_nav_url()) . '">Services</a></li></ul>';
-					},
+					'fallback_cb'    => 'estatein_primary_menu_fallback',
 				]);
-				$contact_url = estatein_nav_url(estatein_field('header_contact_url', 'option', ''));
-				$contact_txt = estatein_field('header_contact_text', 'option', 'Contact Us');
-				echo '<a class="btn btn-outline-light ms-lg-auto mt-3 mt-lg-0" href="' . esc_url($contact_url) . '">' . esc_html($contact_txt) . '</a>';
+
+				echo estatein_button(
+					estatein_field('header_contact_text', 'option'),
+					$contact_url,
+					'btn btn-outline-light ms-lg-auto mt-3 mt-lg-0'
+				);
 				?>
 			</div>
 		</div>

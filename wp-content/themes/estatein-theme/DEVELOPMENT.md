@@ -26,7 +26,7 @@ Editors should be able to change copy, images, prices, FAQs, testimonials, and t
 | File key | `sB858zfXBBh0WTzfwu7H32` |
 | Figma MCP account | `addina.nuriyanti@gmail.com` |
 
-An older duplicate file (`4n8kGE4VcLbTwpobbyfwXS`) is the same template. Prefer the community file above. Theme `style.css` still lists the older URI; treat the community file as canonical.
+An older duplicate file (`4n8kGE4VcLbTwpobbyfwXS`) is the same template. Prefer the community file above; it is what `style.css` points at.
 
 Desktop home frame: **`46:304`** (1920×5196). Visual child order in Figma is not reading order. Hero is `121:1772`, not the first child.
 
@@ -87,8 +87,9 @@ inc/theme-setup.php       Supports, menus, image size, settings page
 inc/assets.php            Enqueue CSS/JS; bump versions after visual changes
 inc/cpt.php               All register_post_type / register_taxonomy
 inc/acf-fields.php        Local ACF field groups (acf/init)
+inc/content-defaults.php  Every Figma fallback string, in one place
 inc/helpers.php           Field, image, button, currency wrappers
-inc/navigation.php        Park non-home links on "#"
+inc/navigation.php        Park non-home links on "#"; footer menu walker
 inc/slider.php            Homepage carousel queries and controls
 inc/template-functions.php
 header.php / footer.php / front-page.php / index.php
@@ -98,7 +99,13 @@ assets/css/theme.css      Tokens + shared UI
 assets/css/front-page.css Homepage-only, enqueued on the front page
 assets/js/theme.js
 assets/icons/             Exported Figma assets only
+languages/                Text domain "estatein" loads from here
 ```
+
+**Fallback copy lives in one file.** Templates call `estatein_field( 'hero_heading' )` with no
+inline default; `estatein_field()` looks the Figma wording up in
+`inc/content-defaults.php` when the ACF value is empty. That keeps design copy out
+of the markup and makes "where does this text come from?" a one-file answer.
 
 **Why this layout:** WordPress needs `style.css` for the theme name, but dumping thousands of lines of CSS there is unmaintainable. `functions.php` stays a loader so features can be found by filename. CPTs and ACF never register from a random template.
 
@@ -181,6 +188,13 @@ That choice shows up in code:
 - `estatein_nav_url()` / `estatein_park_menu_links()` send every destination **other than Home** to `#`.
 - The settings page and property singles redirect home (302).
 
+`estatein_url_is_front_page()` decides what survives, and it is deliberately strict:
+
+- A different host is never our front page, so an external URL is not rewritten to Home.
+- A URL containing a fragment counts as parked. Editors type `http://estatein.local/#`
+  to mean "no destination yet", and that must not resolve to the homepage. Only a
+  clean homepage URL (or a front-page menu item) links Home.
+
 When inner pages are built, parking can be lifted per destination instead of rewriting the header.
 
 ### Properties are posts, not ACF IDs on the homepage
@@ -191,7 +205,7 @@ Early on, homepage featured listings were selected by ACF post IDs. That was rep
 - ACF on a property is **price only**.
 - Hierarchical taxonomies (checkbox UI): `featured_property`, `bedroom`, `bathroom`, `property_type`.
 - Homepage carousel: `WP_Query` with `tax_query` for term slug `featured` on `featured_property`.
-- Cards use `the_permalink()`, trimmed excerpt (~24 words), and a **Read More** link styled to Figma (Urbanist 18px / 500, `#703bf7`, no underline).
+- Cards link through `estatein_single_url()`, trimmed excerpt (~24 words), and a **Read More** link styled to Figma (Urbanist 18px / 500, `#703bf7`, no underline). Every card link goes through that one helper, so a post type that stops being publicly queryable degrades to `#` instead of a 404.
 
 **Why taxonomies for bedrooms/baths/type:** editors get native checkboxes and admin columns. Those values are labels on the card, not public archive URLs (`public` is false, `rewrite` is false).
 
@@ -212,7 +226,7 @@ The footer walker treats **top-level items as column headings** and **children a
 | Urbanist from Google Fonts | Matches Figma; weights 300, 500, 600, 700 |
 | hamburgers.css (theme file) | Mobile menu icon |
 
-Slick and its CSS load only on `is_front_page()`. Version query strings in `inc/assets.php` are bumped when CSS/JS change so Local’s cache does not serve stale files.
+Slick and its CSS load only on `is_front_page()`. Asset versions are the theme version plus each file’s modification time (`estatein_asset_version()`), so an edited stylesheet busts caches on its own — there is nothing to bump by hand.
 
 ### Accessibility and motion (after visual parity)
 
@@ -270,7 +284,7 @@ No Mailchimp, no ACF Pro, no slider plugin (Slick is a theme enqueue), no form p
 5. Add Properties; assign Featured Property term `featured` for homepage cards. Set featured image, excerpt, price, bedroom/bathroom/type terms.
 6. Add FAQ and Testimonial posts; homepage counts come from the Home page number fields.
 7. Assign menus **Estatein Primary** and **Estatein Footer**.
-8. After CSS/JS edits, bump the version in `inc/assets.php`.
+8. Edit CSS/JS and reload — asset versions update themselves from the file’s modification time.
 
 **Do not** invent tokens or layouts that disagree with Figma. **Do not** register ACF Pro field types while the site is on ACF Free.
 
